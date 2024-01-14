@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -44,10 +45,16 @@ export default function UserSubmission() {
   
   return (  
   <>
-      <Stack
+  <Paper elevation={5}>
+      <Box
       component="form"
       sx={{
-        width: '100ch',
+        display: 'flow',
+        
+        margin: 2,
+        flexWrap: 'wrap'
+
+
       }}
       spacing={3}
       noValidate
@@ -70,22 +77,29 @@ export default function UserSubmission() {
     <form method="post" onSubmit={handleSubmit}>
 
       <TextField fullWidth id="outlined-basic" label="Your input" variant="outlined" />
+      <Typography mt={2}></Typography>
       <BlueBar/>
+      <Typography mt={2}></Typography>
       <Typography align='center'>
       <Button variant="contained">Submit for sentiment analysis</Button>
       </Typography>
     </form>
     </div>
+    <Typography mt={2}></Typography>
     <BlueBar/>
-    <TextField
+    <Typography mt={2}></Typography>
+    <TextField fullWidth
           id="outlined-read-only-input"
-          label="Read Only"
+          label="Sentiment Output"
           defaultValue="Happy"
+
           InputProps={{
             readOnly: true,
           }}
         />
-  </Stack>
+  </Box>
+  </Paper>
+  
   </>
   );
 }
