@@ -1,14 +1,41 @@
+// React imports
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import AWS from 'aws-sdk';
+require ('aws-sdk');
+
+// Common Variables for AWS
+var bucketName = "comprehend-project-1";
+var bucketRegion = "us-east-2";
+var IdentityPoolID = "us-east-2:aa3baaa3-c79c-4b4a-95d8-dfc9f7ddd81c";
+
+//Configure AWS services
+
+AWS.config.update({
+	region: bucketRegion,
+	credentials: new AWS.CognitoIdentityCredentials({
+	IdentityPoolId: IdentityPoolID
+	})
+});
+
+var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+
+var s3 = new AWS.S3({
+	apiVersion: "2006-03-01",
+	params: { Bucket: bucketName }
+});
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 function BlueBar() {
   return (
@@ -34,8 +61,8 @@ export default function UserSubmission() {
     const form = e.target;
     const formData = new FormData(form);
 
-    // You can pass formData as a fetch body directly:
-    fetch('/some-api', { method: form.method, body: formData });
+    console.log(formData);
+
 
     // Or you can work with it as a plain object:
     const formJson = Object.fromEntries(formData.entries());
@@ -47,14 +74,10 @@ export default function UserSubmission() {
   <>
   <Paper elevation={5}>
       <Box
-      component="form"
       sx={{
         display: 'flow',
-        
         margin: 2,
         flexWrap: 'wrap'
-
-
       }}
       spacing={3}
       noValidate
@@ -81,7 +104,7 @@ export default function UserSubmission() {
       <BlueBar/>
       <Typography mt={2}></Typography>
       <Typography align='center'>
-      <Button variant="contained">Submit for sentiment analysis</Button>
+      <Button variant="contained" type="submit">Submit for sentiment analysis</Button>
       </Typography>
     </form>
     </div>
