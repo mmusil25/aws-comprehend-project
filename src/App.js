@@ -119,15 +119,6 @@ export default function UserSubmission() {
     <Typography mt={2}></Typography>
     <BlueBar/>
     <Typography mt={2}></Typography>
-    <TextField fullWidth
-          id="outlined-read-only-input"
-          label="Sentiment Output"
-          defaultValue="Happy"
-
-          InputProps={{
-            readOnly: true,
-          }}
-        />
   </Box>
   </Paper>
   
