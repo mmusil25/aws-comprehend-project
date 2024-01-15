@@ -17,21 +17,26 @@ var bucketName = "comprehend-project-1";
 var bucketRegion = "us-east-2";
 var IdentityPoolID = "us-east-2:aa3baaa3-c79c-4b4a-95d8-dfc9f7ddd81c";
 
-//Configure AWS services
+//Function to call API
 
-AWS.config.update({
-	region: bucketRegion,
-	credentials: new AWS.CognitoIdentityCredentials({
-	IdentityPoolId: IdentityPoolID
-	})
-});
+var callAPI = (text) =>{
+  var myHeaders = new Headers();
+  myHeaders.append("Context-Type", "application/json");
+  var raw = JSON.stringify({"text": text})
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
 
-var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+  //Make api call and get response
+  fetch("https://mwbhfmg0p8.execute-api.us-east-2.amazonaws.com/comprehend-dev-stage", requestOptions)
+  .then(response => response.text())
+  .then(result => alert(JSON.parse(result).body))
+  .catch(error => console.log('error', error));
 
-var s3 = new AWS.S3({
-	apiVersion: "2006-03-01",
-	params: { Bucket: bucketName }
-});
+}
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -61,12 +66,8 @@ export default function UserSubmission() {
     const form = e.target;
     const formData = new FormData(form);
 
-    console.log(formData);
-
-
-    // Or you can work with it as a plain object:
-    const formJson = Object.fromEntries(formData.entries());
-    console.log(formJson);
+    console.log(formData.get('input-field'));
+    callAPI(formData.get('input-field'))
   }
 
   
@@ -99,7 +100,7 @@ export default function UserSubmission() {
     <div>
     <form method="post" onSubmit={handleSubmit}>
 
-      <TextField fullWidth id="outlined-basic" label="Your input" variant="outlined" />
+      <TextField fullWidth name='input-field' id="outlined-basic" label="Your input" variant="outlined" />
       <Typography mt={2}></Typography>
       <BlueBar/>
       <Typography mt={2}></Typography>
