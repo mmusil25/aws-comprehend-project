@@ -13,9 +13,16 @@ import AWS from 'aws-sdk';
 require ('aws-sdk');
 
 // Common Variables for AWS
-var bucketName = "comprehend-project-1";
-var bucketRegion = "us-east-2";
+var Region = "us-east-2";
 var IdentityPoolID = "us-east-2:aa3baaa3-c79c-4b4a-95d8-dfc9f7ddd81c";
+
+AWS.config.update({
+	region: Region,
+	credentials: new AWS.CognitoIdentityCredentials({
+	IdentityPoolId: IdentityPoolID
+	})
+});
+
 
 //Function to call API
 
